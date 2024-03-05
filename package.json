@@ -1,0 +1,15 @@
+{
+  "name": "alx-backend-javascript",
+  "description": "ES6 basics learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node 0-main.js"
+  },
+  "keywords": [
+    "es6",
+    "basics"
+  ],
+  "author": "Mthokozisi",
+  "license": "ISC"
+}
