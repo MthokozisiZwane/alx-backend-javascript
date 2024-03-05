@@ -1,0 +1,4 @@
+{
+    "eslint.nodePath": "${workspaceFolder}/node_modules/eslint"
+  }
+  
