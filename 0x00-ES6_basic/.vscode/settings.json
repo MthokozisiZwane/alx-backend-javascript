@@ -1,4 +1,4 @@
 {
-    "eslint.nodePath": "${workspaceFolder}/node_modules/eslint"
+    "eslint.nodePath": "${0x00-ES6_basic}/node_modules/eslint"
   }
   
