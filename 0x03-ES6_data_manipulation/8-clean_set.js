@@ -6,11 +6,7 @@ function cleanSet(set, startString) {
       result += trimmedValue + '-';
     }
   });
-  if (result.length === 0) {
-    return '';
-  } else {
-    return result.slice(0, -1);
-  }
+  return result.slice(0, -1);
 }
 
 export default cleanSet;
