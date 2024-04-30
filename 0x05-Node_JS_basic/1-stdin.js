@@ -11,6 +11,7 @@ function userInteraction() {
     } else {
       console.log('Your name is: <undefined>');
     }
+    process.stdout.write('Welcome to Holberton School, what is your name?\n');
   });
 
   process.stdin.on('end', () => {
