@@ -11,8 +11,10 @@ function userInteraction() {
     } else {
       console.log('Your name is: <undefined>');
     }
-    process.stdout.write('\nThis important software is now closing\n');
-    process.exit();
+  });
+
+  process.stdin.on('end', () => {
+    console.log('\nThis important software is now closing\n');
   });
 }
 
