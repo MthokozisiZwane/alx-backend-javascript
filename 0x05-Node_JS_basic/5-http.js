@@ -7,7 +7,7 @@ async function readDatabase(filePath) {
     const lines = data.trim().split('\n');
     const students = {
       CS: [],
-      SWE: []
+      SWE: [],
     };
     for (const line of lines) {
       const [firstname, , , field] = line.split(',');
@@ -29,10 +29,11 @@ const app = http.createServer(async (req, res) => {
   } else if (req.url === '/students') {
     try {
       const students = await readDatabase('database.csv');
-      const totalStudents = Object.values(students).reduce((total, field) => total + field.length, 0);
+      const totalStudents = Object.values(students).reduce((total, field) => total
+                                                           + field.length, 0);
       res.write('This is the list of our students\n');
       res.write(`Number of students: ${totalStudents}\n`);
-      Object.keys(students).forEach(field => {
+      Object.keys(students).forEach((field) => {
         res.write(`Number of students in ${field}: ${students[field].length}. List: ${students[field].join(', ')}`);
       });
       res.end();
