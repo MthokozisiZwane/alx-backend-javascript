@@ -31,19 +31,21 @@ const app = http.createServer(async (req, res) => {
       const students = await readDatabase('database.csv');
       const totalStudents = Object.values(students).reduce((total, field) => total
                                                            + field.length, 0);
-      res.write('This is the list of our students\n');
-      res.write(`Number of students: ${totalStudents}\n`);
+      const responseLines = [
+        'This is the list of our students',
+        `Number of students: ${totalStudents}`,
+      ];
       Object.keys(students).forEach((field) => {
-        res.write(`Number of students in ${field}: ${students[field].length}. List: ${students[field].join(', ')}`);
+        responseLines.push(`Number of students in ${field}: ${students[field].length}. List: ${students[field].join(', ')}`);
       });
-      res.end();
+      res.end(responseLines.join('\n'));
     } catch (error) {
       res.statusCode = 500;
-      res.end('Cannot load the database\n');
+      res.end('Cannot load the database');
     }
   } else {
     res.statusCode = 404;
-    res.end('Endpoint not found\n');
+    res.end('Endpoint not found');
   }
 });
 
