@@ -30,7 +30,7 @@ const app = http.createServer(async (req, res) => {
     try {
       const students = await readDatabase('database.csv');
       const totalStudents = Object.values(students).reduce((total, field) => total + field.length, 0);
-      res.write('This is the list of our students');
+      res.write('This is the list of our students\n');
       res.write(`Number of students: ${totalStudents}\n`);
       Object.keys(students).forEach(field => {
         res.write(`Number of students in ${field}: ${students[field].length}. List: ${students[field].join(', ')}`);
