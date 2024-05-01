@@ -36,7 +36,8 @@ const app = http.createServer(async (req, res) => {
         `Number of students: ${totalStudents}`,
       ];
       Object.keys(students).forEach((field) => {
-        responseLines.push(`Number of students in ${field}: ${students[field].length}. List: ${students[field].join(', ')}`);
+        responseLines.push(`Number of students in ${field}:
+                           ${students[field].length}. List: ${students[field].join(', ')}`);
       });
       res.end(responseLines.join('\n'));
     } catch (error) {
