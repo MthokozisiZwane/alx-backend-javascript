@@ -11,5 +11,8 @@
     "basics"
   ],
   "author": "Mthokozisi",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "sinon": "^17.0.1"
+  }
 }
