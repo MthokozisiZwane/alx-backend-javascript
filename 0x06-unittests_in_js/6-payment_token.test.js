@@ -3,7 +3,7 @@ const getPaymentTokenFromAPI = require('./6-payment_token');
 
 describe('getPaymentTokenFromAPI', function () {
     it('should return a resolved promise with the correct data when success is true', function (done) {
-        // Calls the function with success set to true
+        // Call the function with success set to true
         getPaymentTokenFromAPI(true)
             .then(response => {
                 // Verify that the response object contains the correct data
@@ -16,13 +16,13 @@ describe('getPaymentTokenFromAPI', function () {
     });
 
     it('should return an unresolved promise when success is false', function (done) {
-        // Calls the function with success set to false
+        // Call the function with success set to false
         getPaymentTokenFromAPI(false)
             .then(response => {
                 done(new Error('Promise should not be resolved'));
             })
             .catch(error => {
-                // Verifies that the promise is rejected
+                // Verify that the promise is rejected
                 expect(error).to.be.undefined;
                 done();
             });
