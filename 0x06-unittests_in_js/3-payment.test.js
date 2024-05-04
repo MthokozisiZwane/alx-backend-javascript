@@ -5,11 +5,11 @@ const Utils = require('./utils.js');
 const sendPaymentRequestToApi = require('./3-payment.js');
 
 describe('sendPaymentRequestToApi function', () => {
-  // create the spy / wrapper of an existing function
+  
   const utilSpy = sinon.spy(Utils, 'calculateNumber');
 
   it('validate the usage of the Utils function', () => {
-    // run the function with the parameters
+    
     sendPaymentRequestToApi(100, 20);
     // check that the spy was called exactly once
     expect(utilSpy.calledOnce).to.be.true;
