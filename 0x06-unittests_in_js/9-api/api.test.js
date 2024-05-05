@@ -1,22 +1,22 @@
-const request = require('request');
-const { expect } = require('chai');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const app = require('./api');
+
+chai.use(chaiHttp);
+const { expect } = chai;
 
 describe('Cart page', () => {
-  it('Correct status code when :id is a number?', (done) => {
-    request('http://localhost:7865/cart/123', (error, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      done();
+  describe('GET /cart/:id', () => {
+    it('should return payment methods for a valid cart ID', async () => {
+      const res = await chai.request(app).get('/cart/12');
+      expect(res).to.have.status(200);
+      expect(res.text).to.equal('Payment methods for cart 12');
     });
-  });
 
-  it('Correct status code when :id is NOT a number (=> 404)?', (done) => {
-    request('http://localhost:7865/cart/abc', (error, response, body) => {
-      expect(response.statusCode).to.equal(404);
-      done();
+    it('should return a 404 status code for an invalid cart ID', async () => {
+      const res = await chai.request(app).get('/cart/hello');
+      expect(res).to.have.status(404);
+      expect(res.text).to.equal('Cannot GET /cart/hello');
     });
-  });
-
-  it('Other?', (done) => {
-    done();
   });
 });
