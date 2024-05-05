@@ -1,38 +1,210 @@
-const { expect } = require('chai');
-const request = require('supertest');
-const app = require('./api');
+const { expect } = require("chai");
+const request = require('request');
+
 
 describe('Integration Testing', () => {
-  describe('GET /available_payments', () => {
-    it('responds with available payment methods', (done) => {
-      request(app)
-        .get('/available_payments')
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err);
-          expect(res.body).to.deep.equal({
-            payment_methods: {
-              credit_cards: true,
-              paypal: false
-            }
-          });
-          done();
-        });
+  describe('GET /', () => {
+    it('Code: 200 | Body: Welcome to the payment system', (done) => {
+      const options = {
+        url: 'http://localhost:7865',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.equal('Welcome to the payment system');
+        done();
+      });
     });
   });
 
-  describe('POST /login', () => {
-    it('responds with a welcome message', (done) => {
-      const username = 'Alice';
-      request(app)
-        .post('/login')
-        .send({ userName: username })
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err);
-          expect(res.text).to.equal(`Welcome ${username}`);
-          done();
-        });
+  describe('GET /cart/12', () => {
+    it('Responds with 200 and id 12', (done) => {
+      const options = {
+        url: 'http://localhost:7865/cart/12',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.equal('Payment methods for cart 12');
+        done();
+      });
     });
   });
+
+  describe('GET /cart/1', () => {
+    it('Responds with 200 and id 1', (done) => {
+      const options = {
+        url: 'http://localhost:7865/cart/1',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.equal('Payment methods for cart 1');
+        done();
+      });
+    });
+  });
+
+  describe('GET /cart/123', () => {
+    it('Responds with 200 and id 12', (done) => {
+      const options = {
+        url: 'http://localhost:7865/cart/123',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.equal('Payment methods for cart 123');
+        done();
+      });
+    });
+  });
+
+  describe('GET /cart/a12', () => {
+    it('Responds with 404', (done) => {
+      const options = {
+        url: 'http://localhost:7865/cart/a12',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(404);
+        done();
+      });
+    });
+  });
+
+  describe('GET /cart/a12b', () => {
+    it('Responds with 404', (done) => {
+      const options = {
+        url: 'http://localhost:7865/cart/a12b',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(404);
+        done();
+      });
+    });
+  });
+
+  describe('GET /cart/12b', () => {
+    it('Responds with 404', (done) => {
+      const options = {
+        url: 'http://localhost:7865/cart/12b',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(404);
+        done();
+      });
+    });
+  });
+
+  describe('GET /cart/hello', () => {
+    it('Responds with 404', (done) => {
+      const options = {
+        url: 'http://localhost:7865/cart/hello',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(404);
+        done();
+      });
+    });
+  });
+
+  describe('GET /cart/', () => {
+    it('Responds with 404', (done) => {
+      const options = {
+        url: 'http://localhost:7865/cart/',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(404);
+        done();
+      });
+    });
+  });
+
+  describe('GET /available_payments JSON string', () => {
+    it('Responds with 200 and correct JSON string', (done) => {
+      const options = {
+        url: 'http://localhost:7865/available_payments',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.equal(
+          '{"payment_methods":{"credit_cards":true,"paypal":false}}'
+        );
+        done();
+      });
+    });
+  });
+
+  describe('GET /available_payments JSON parsed', () => {
+    it('Responds with 200 and correct JSON object when parsed', (done) => {
+      const options = {
+        url: 'http://localhost:7865/available_payments',
+        method: 'GET',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        const bodyParsed = JSON.parse(body);
+
+        const referenceBody = {
+          payment_methods: {
+            credit_cards: true,
+            paypal: false,
+          },
+        };
+
+        expect(bodyParsed).to.deep.equal(referenceBody);
+        done();
+      });
+    });
+  });
+
+  describe('POST /login with body', () => {
+    it('Responds with 200 and correct name Rex', (done) => {
+      const options = {
+        url: 'http://localhost:7865/login',
+        method: 'POST',
+        json: {
+          userName: 'Rex',
+        },
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.equal('Welcome Rex');
+        done();
+      });
+    });
+  });
+
+  describe('POST /login with no body', () => {
+    it('Responds with 200 cpde and name Undefined', (done) => {
+      const options = {
+        url: 'http://localhost:7865/login',
+        method: 'POST',
+      };
+
+      request(options, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        expect(body).to.equal('Welcome undefined');
+        done();
+      });
+    });
+  });
+
 });
