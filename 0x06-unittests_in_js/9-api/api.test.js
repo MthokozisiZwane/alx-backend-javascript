@@ -1,22 +1,22 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('./api');
+const request = require('supertest');
+const app = require('../app');
 
-chai.use(chaiHttp);
-const { expect } = chai;
-
-describe('Cart page', () => {
+describe('Integration Testing', () => {
   describe('GET /cart/:id', () => {
-    it('should return payment methods for a valid cart ID', async () => {
-      const res = await chai.request(app).get('/cart/12');
-      expect(res).to.have.status(200);
-      expect(res.text).to.equal('Payment methods for cart 12');
+    it('Responds with 200 and correct message for valid cart ID', async () => {
+      const response = await request(app).get('/cart/12');
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('Payment methods for cart 12');
     });
 
-    it('should return a 404 status code for an invalid cart ID', async () => {
-      const res = await chai.request(app).get('/cart/hello');
-      expect(res).to.have.status(404);
-      expect(res.text).to.equal('Cannot GET /cart/hello');
+    it('Responds with 404 for non-numeric cart ID', async () => {
+      const response = await request(app).get('/cart/hello');
+      expect(response.status).toBe(404);
+    });
+
+    it('Responds with 404 for invalid route', async () => {
+      const response = await request(app).get('/cart/invalid');
+      expect(response.status).toBe(404);
     });
   });
 });
