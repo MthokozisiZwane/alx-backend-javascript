@@ -15,3 +15,8 @@ describe('Cart page', () => {
       done();
     });
   });
+
+  it('Other?', (done) => {
+    done();
+  });
+});
