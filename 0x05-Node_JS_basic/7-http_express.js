@@ -1,64 +1,29 @@
-const fs = require('fs').promises;
 const express = require('express');
-
-async function readDatabase(filePath) {
-  try {
-    const data = await fs.readFile(filePath, 'utf8');
-    const lines = data.trim().split('\n');
-    const students = lines.map((line) => {
-      const [firstname, field] = line.split(',').map((item) => item.trim());
-      return { firstname, field };
-    });
-    return students;
-  } catch (error) {
-    throw new Error('Cannot read the database');
-  }
-}
-
+const students = require('./3-read_file_async');
 const app = express();
+const hostname = '127.0.0.1';
+const port = 1245;
 
-// Route for the "/students" endpoint
+app.get('/', (req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.send('Hello Holberton School!');
+});
+
 app.get('/students', async (req, res) => {
-  try {
-    const data = await readDatabase('database.csv');
-    const fieldCounts = {};
-
-    // Count students in each field
-    data.forEach((student) => {
-      if (student.field && student.field.trim() !== '') { // Check if field is valid
-        if (!(student.field in fieldCounts)) {
-          fieldCounts[student.field] = [];
-        }
-        fieldCounts[student.field].push(student.firstname);
-      }
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.write('This is the list of our students\n');
+  await students(process.argv[2]).then((data) => {
+    res.write(`Number of students: ${data.students.length}\n`);
+    res.write(`Number of students in CS: ${data.csStudents.length}. List: ${data.csStudents.join(', ')}\n`);
+    res.write(`Number of students in SWE: ${data.sweStudents.length}. List: ${data.sweStudents.join(', ')}`);
+  }).catch((error) => res.write(error.message))
+    .finally(() => {
+      res.end();
     });
-
-    // Construct the response with field counts
-    let response = 'This is the list of our students\n';
-    let totalStudents = 0;
-    for (const field in fieldCounts) {
-      if (Object.prototype.hasOwnProperty.call(fieldCounts, field)) {
-        const count = fieldCounts[field].length;
-        response += `Number of students in ${field}: ${count}. List: ${fieldCounts[field].join(', ')}\n`;
-        totalStudents += count;
-      }
-    }
-
-    // Add total number of students at the beginning
-    response = `This is the list of our students\nNumber of students: ${totalStudents}\n${response}`;
-
-    // Send the response with the list of students
-    res.send(response);
-  } catch (error) {
-    // Handle errors
-    console.error('Error:', error);
-    res.status(500).send('Cannot load the database');
-  }
 });
 
-// Start the server and listen on port 1245
-app.listen(1245, () => {
-  console.log('Server is listening on port 1245');
+app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}`);
 });
-
-module.exports = app;
